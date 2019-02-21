@@ -1,0 +1,165 @@
+---
+title: Ana-Maria 1.4 
+output: html_notebook
+---
+[BIEN](http://biendata.org)
+```{r}
+Zanthoxylum_americanum <- BIEN_occurrence_species(species = "Zanthoxylum americanum")
+str(Zanthoxylum_americanum)
+head(Zanthoxylum_americanum)
+tail(Zanthoxylum_americanum)
+```
+Information for my species has been downloaded so now we will use this to make a rangemap
+```{r}
+zanthoxylum_americanum_rangemap <- BIEN_ranges_load_species("Zanthoxylum_americanum")
+
+# Mapping the range of zanthoxylum americanum 
+map('world', fill=T, col="grey", bg = "light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(zanthoxylum_americanum_rangemap, col="green", add=T)
+```
+```{r}
+#Now we will map the range and occurence of pricklyash
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,-20), ylim=c(-60, 80))
+plot(zanthoxylum_americanum_rangemap, col="green", add=T)
+points(cbind(Zanthoxylum_americanum$longitude,Zanthoxylum_americanum$latitude), col="blue", pch=20, cex=1)
+```
+```{r}
+#Now that we have the range and occurence for pricklyash we will expand this data set for the entire world 
+Zanthoxylum_americanum_full <- BIEN_occurrence_species(species = "Zanthoxylum americanum",cultivated = T,only.new.world = F,all.taxonomy = T,native.status = T,observation.type = T,political.boundaries = T)
+
+str(Zanthoxylum_americanum_full)
+```
+```{r} 
+#now we will map this 
+map('world', fill=T , col="grey", bg="light blue")
+
+#here we are plotting ALL points in red
+points(cbind(Zanthoxylum_americanum_full$longitude, Zanthoxylum_americanum_full$latitude), col="red", pch=20, cex=1)
+
+#here we are plotting points from oroginal data set in blue
+points(cbind(Zanthoxylum_americanum$longitude, Zanthoxylum_americanum$latitude), col="blue", pch=20, cex=1) 
+```
+```{r}
+#now we will map another a cousin of pricklyash, known as wid lime
+Zanthoxylum_fagara <- BIEN_occurrence_species(species = "Zanthoxylum fagara")
+str(Zanthoxylum_fagara)
+head(Zanthoxylum_fagara)
+tail(Zanthoxylum_fagara)
+```
+
+```{r}
+#now we will make a range map for wild lime
+zanthoxylum_fagara_rangemap <- BIEN_ranges_load_species("Zanthoxylum_fagara")
+
+
+map('world', fill=T, col="grey", bg = "light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(zanthoxylum_fagara_rangemap, col="green", add=T)
+```
+```{r}
+#now we will map range and occurence for wild lime 
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,-20), ylim=c(-60, 80))
+plot(zanthoxylum_fagara_rangemap, col="green", add=T)
+points(cbind(Zanthoxylum_fagara$longitude,Zanthoxylum_fagara$latitude), col="blue", pch=20, cex=1)
+```
+```{r}
+#now we will expand this same data set for the world
+Zanthoxylum_fagara_full <- BIEN_occurrence_species(species = "Zanthoxylum fagara",cultivated = T,only.new.world = F,all.taxonomy = T,native.status = T,observation.type = T,political.boundaries = T)
+
+str(Zanthoxylum_fagara_full)
+```
+```{r}
+#now we will map the added data with out original data set of wild lime 
+map('world', fill=T , col="grey", bg="light blue")
+
+#here we are plotting ALL points in red
+points(cbind(Zanthoxylum_fagara_full$longitude, Zanthoxylum_fagara_full$latitude), col="red", pch=20, cex=1)
+
+#here we are plotting points from oroginal data set in blue
+points(cbind(Zanthoxylum_fagara$longitude, Zanthoxylum_fagara$latitude), col="blue", pch=20, cex=1) 
+```
+```{r}
+#Now we will begin to do a statistical analysis of one trait between these two species
+BIEN_trait_list()
+```
+```{r}
+#now we will create a frame for Zanthoxylum traits 
+Zanthoxylum_traits <- BIEN_trait_genus(genus = "Zanthoxylum")
+str(Zanthoxylum_traits)
+Zanthoxylum_traits
+```
+```{r}
+#Now we will choose a trait, I chose seed mass 
+zanthoxylum_sm <- BIEN_trait_traitbygenus(trait = "seed mass", genus = "Zanthoxylum")
+head(zanthoxylum_sm)
+tail(zanthoxylum_sm)
+str(zanthoxylum_sm)
+```
+```{r}
+#Now we will list the variables from the data frame
+names(zanthoxylum_sm)
+```
+```{r}
+zanthoxylum_sm_small = zanthoxylum_sm[c(1:5)]
+zanthoxylum_sm_small
+zanthoxylum_sm_small = as.data.frame(zanthoxylum_sm_small)
+class(zanthoxylum_sm_small)
+head(zanthoxylum_sm_small)
+class(zanthoxylum_sm_small$trait_value)
+sm = as.numeric(zanthoxylum_sm_small$trait_value)
+class(sm)
+```
+```{r}
+#now we will use this data to make a box plot showing the data we gathered about seed mass
+library(lattice)
+head(zanthoxylum_sm_small)
+boxplot(sm~scrubbed_species_binomial, data=zanthoxylum_sm_small)
+```
+```{r}
+#now I will pick another trait for the same genus, in this case I picked whole plant height
+zanthoxylum_ph <- BIEN_trait_traitbygenus(trait = "whole plant height", genus = "Zanthoxylum")
+head(zanthoxylum_ph)
+tail(zanthoxylum_ph)
+str(zanthoxylum_ph)
+```
+```{r}
+#listing the variables from the data frame 
+names(zanthoxylum_ph)
+
+```
+```{r}
+#now we wil continue to define the variable 
+zanthoxylum_ph_small =zanthoxylum_ph[c(1:5)]
+zanthoxylum_ph_small
+zanthoxylum_ph_small = as.data.frame(zanthoxylum_ph_small)
+class(zanthoxylum_ph_small)
+head(zanthoxylum_ph_small)
+class(zanthoxylum_ph_small$trait_value)
+ph = as.numeric(zanthoxylum_ph_small$trait_value)
+class(ph)
+```
+```{r}
+#now we will make a box plot to analyze the data on whole plant height 
+library(lattice)
+head(zanthoxylum_ph_small)
+boxplot(ph~scrubbed_species_binomial, data=zanthoxylum_ph_small)
+```
+```{r}
+#now we will summarize the data, first for plant height and then for seed mass 
+mean(ph, data=zanthoxylum_ph_small)
+mean(sm, data=zanthoxylum_sm_small)
+```
+
+In this assignemnt I learned how to map both range and occurence for plant species and this was shown through the two maps that I did mapping prickly ash and wild lime, both "cousins" within the Zanthoxylum family. Afterwards I decided to go within the general Genus of of the Zanthoxylum family to compare traits. From this genus I chose to compare seed mass and whole plant height. First I created a box plot for both in order to gange a general summary of the distribution for seed mass across two species of zanthoxylum, and then I did the same, except for plant heght. Afterwards I conducted a summary statistics and gathered that the mean seed mass for zanthoxylum in my designated data range was 19.29608mg and the mean whole plant height within the data range I used was 10.467meters. To complete this assigment I will do a histgram showng the distribution of plant height. 
+```{r}
+#box plot 
+boxplot(ph)
+histogram(ph)
+
+```
+```{r}
+# attempting a test 
+ttest_result1 = t.test(x=zanthoxylum_ph_small$trait_value, y=zanthoxylum_sm_small$trait_value, paired=FALSE, alternative="two.sided")
+ttest_result1
+```
+#Here I tried to finish the portfolio by doing an unpaired t test between two characteristics, however I wasn't able to get the code right. I need to continue working on this 
+
