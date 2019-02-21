@@ -149,9 +149,9 @@ mean(ph, data=zanthoxylum_ph_small)
 mean(sm, data=zanthoxylum_sm_small)
 ```
 
-In this assignemnt I learned how to map both range and occurence for plant species and this was shown through the two maps that I did mapping prickly ash and wild lime, both "cousins" within the Zanthoxylum family. Afterwards I decided to go within the general Genus of of the Zanthoxylum family to compare traits. From this genus I chose to compare seed mass and whole plant height. First I created a box plot for both in order to gange a general summary of the distribution for seed mass across two species of zanthoxylum, and then I did the same, except for plant heght. Afterwards I conducted a summary statistics and gathered that the mean seed mass for zanthoxylum in my designated data range was 19.29608mg and the mean whole plant height within the data range I used was 10.467meters. To complete this assigment I will do a histgram showng the distribution of plant height. 
+In this assignemnt I learned how to map both range and occurence for plant species and this was shown through the two maps that I did mapping prickly ash and wild lime, both "cousins" within the Zanthoxylum family. Afterwards I decided to go within the general Genus of of the Zanthoxylum family to compare traits. From this genus I chose to compare seed mass and whole plant height. First I created a box plot for both in order to gange a general summary of the distribution for seed mass across two species of zanthoxylum, and then I did the same, except for plant heght. Afterwards I conducted a summary statistics and gathered that the mean seed mass for zanthoxylum in my designated data range was 19.29608mg and the mean whole plant height within the data range I used was 10.467meters. To complete this assigment I will do a histgram showng the distribution of plant height and an unpaired t-test in seed mass between Zanthoxylum and Persea. An unpaired t-test was chosen because these species come from a different genus and are independent of eachother.
 ```{r}
-#box plot 
+#histogram of zanthoxylum plant height
 boxplot(ph)
 histogram(ph)
 
@@ -162,4 +162,57 @@ ttest_result1 = t.test(x=zanthoxylum_ph_small$trait_value, y=zanthoxylum_sm_smal
 ttest_result1
 ```
 #Here I tried to finish the portfolio by doing an unpaired t test between two characteristics, however I wasn't able to get the code right. I need to continue working on this 
+```{r}
+#since it didn't work the first time, I will try again and conduct a t-test to compare the seed mass between zanthoxylum and avocados (persea americana) in order to do this I need to create a data frame for avocados
+Persea_americana <- BIEN_occurrence_species(species = "Persea americana")
+str(Persea_americana)
+head(Persea_americana)
+tail(Persea_americana)
+```
+```{r}
+#creating a frame for avocado traits
+Persea_traits <- BIEN_trait_genus(genus = "Persea")
+str(Persea_traits)
+Persea_traits
+```
+```{r}
+#Now we will choose a trait, seed mass
+persea_sm <- BIEN_trait_traitbygenus(trait = "seed mass", genus = "Persea")
+head(persea_sm)
+tail(persea_sm)
+str(persea_sm)
+```
+```{r}
+#Now we will list the variables from the data frame
+names(persea_sm)
+```
+
+```{r}
+persea_sm_small = persea_sm[c(1:5)]
+persea_sm_small
+persea_sm_small = as.data.frame(persea_sm_small)
+class(persea_sm_small)
+head(persea_sm_small)
+class(persea_sm_small$trait_value)
+smp = as.numeric(persea_sm_small$trait_value)
+class(smp)
+```
+```{r}
+#boxplot
+library(lattice)
+head(persea_sm_small)
+boxplot(smp~scrubbed_species_binomial, data=persea_sm_small)
+```
+
+```{r}
+#From this box plot is seemes that the sm between the different species of avocados, let's see how this compares between persea and zanthoxylum in a box plot 
+boxplot(sm,smp)
+```
+```{r}
+#now let's run a t-test to see if there is a statistically significant difference between seed mass of avocados and prickly ash
+ttest_result1 = t.test(x=sm, y=smp, paired=FALSE, alternative="two.sided")
+ttest_result1
+
+```
+#These p-value is greater than 0.05 meaning that the difference between seed mass in Persea and Zanthoxylum is statistically insignificant and more likely due to chance.
 
